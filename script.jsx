@@ -30,6 +30,9 @@ let score = 0;
 
 let lives = 3;
 
+let request = null;
+let isPaused = false;
+
 let rightPressed = false;
 let leftPressed = false;
 
@@ -52,7 +55,7 @@ function keyUpHandler(e) {
     }
 }
 
-function collisionDetection() {
+const collisionDetection = () => {
     for (let c = 0; c < brickColumnCount; c++) {
         for (let r = 0; r < brickRowCount; r++) {
             const b = bricks[c][r];
@@ -77,13 +80,13 @@ function collisionDetection() {
     }
 }
 
-function drawScore() {
+const drawScore = () => {
     ctx.font = "16px Arial";
     ctx.fillStyle = "#0095DD";
     ctx.fillText(`Score: ${score}`, 8, 20);
 }
 
-function drawLives() {
+const drawLives = () => {
     ctx.font = "16px Arial";
     ctx.fillStyle = "#0095DD";
     ctx.fillText(`Lives: ${lives}`, canvas.width - 65, 20);
@@ -168,7 +171,17 @@ const draw = () => {
         paddleX = Math.max(paddleX - 7, 0);
     }
 
-    requestAnimationFrame(draw);
+    request = requestAnimationFrame(draw);
 }
 
 draw();
+
+document.addEventListener("keydown", () => {
+    if(isPaused == false && request !== null){
+        isPaused = true;
+        window.cancelAnimationFrame(request);
+    } else if (isPaused == true) {
+        isPaused = false;
+        request = requestAnimationFrame(draw);
+    }
+});
