@@ -1,6 +1,12 @@
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
 
+const img = new Image();
+img.src = "./images/StatueOfLiberty.jpeg";
+
+canvas.style.border = "3px solid";
+
+
 let x = canvas.width / 2;
 let y = canvas.height - 30;
 let dx = 2;
@@ -11,13 +17,13 @@ const paddleHeight = 10;
 const paddleWidth = 75;
 let paddleX = (canvas.width - paddleWidth) / 2;
 
-const brickRowCount = 3;
+const brickRowCount = 5;
 const brickColumnCount = 5;
-const brickWidth = 75;
-const brickHeight = 20;
-const brickPadding = 10;
+const brickWidth = canvas.width/5;
+const brickHeight = brickWidth * 2/3;
+const brickPadding = 0;
 const brickOffsetTop = 30;
-const brickOffsetLeft = 30;
+const brickOffsetLeft = 0;
 const bricks = [];
 for (let c = 0; c < brickColumnCount; c++) {
   bricks[c] = [];
@@ -44,14 +50,18 @@ function keyDownHandler(e) {
       rightPressed = true;
     } else if (e.key === "Left" || e.key === "ArrowLeft") {
       leftPressed = true;
+    } else if (e.key === " " || e.key === "Spacebar") {
+        pause();
     }
 }
-  
+
 function keyUpHandler(e) {
     if (e.key === "Right" || e.key === "ArrowRight") {
       rightPressed = false;
     } else if (e.key === "Left" || e.key === "ArrowLeft") {
       leftPressed = false;
+    } else if (e.key === "SPACE") {
+        spacePressed = false;
     }
 }
 
@@ -119,7 +129,10 @@ const drawBricks = () => {
             bricks[c][r].y = brickY;
             ctx.beginPath();
             ctx.rect(brickX, brickY, brickWidth, brickHeight);
-            ctx.fillStyle = "#0095DD";
+            ctx.lineWidth = 2;
+            ctx.strokeStyle = "#999";
+            ctx.stroke();
+            ctx.fillStyle = "#fff";
             ctx.fill();
             ctx.closePath();
             }
@@ -129,6 +142,7 @@ const drawBricks = () => {
   
 const draw = () => {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.drawImage(img, 0, 30, canvas.width, img.height * canvas.width/img.width)
     drawBricks();
     drawBall();
     drawPaddle();
@@ -176,12 +190,13 @@ const draw = () => {
 
 draw();
 
-document.addEventListener("keydown", () => {
-    if(isPaused == false && request !== null){
+const pause = () => {
+    if(!isPaused && request !== null){
         isPaused = true;
         window.cancelAnimationFrame(request);
-    } else if (isPaused == true) {
+        request = null;
+    } else if (isPaused) {
         isPaused = false;
         request = requestAnimationFrame(draw);
-    }
-});
+    } 
+}
