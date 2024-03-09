@@ -7,22 +7,28 @@
     </head>
     <body>
         <div class="container">
+            <div class="title">
+                <h1>ブロック25</h1>
+            </div>
             <div class="explanation">
+                <h2>ルール説明</h2>
                 <p>キーボードの左右キー（←／→）で板を左右に動かします</p>
                 <p>スペースキーで一時停止できます</p>
-                <p>なるべく早く答えると高得点！</p>
+                <p>正解した時に残っていたパネルの枚数が得点になります</p>
             </div>
             <div>
                 <canvas id="canvas" width="400" height="400"> </canvas>
             </div>
-                <form action ="/" method = "post">
+            <div>
+                <form id = "answerForm">
                     <p id ="question"></p>
                     <p>（<span id="ansType"></span><span id="ansLength"></span>文字）</p>
-                    <input type="text" name="userAns">
-                    <input type="submit" value="答える！">
+                    <input type ="hidden" name="quizID" id="quizID">
+                    <input type="text" name="userAns" id ="userAns">
+                    <input type="button" value="答える！" onclick="sendAnswer()">
                 </form>
-            <div>
-
+            </div>
+            <div id = "quizResult">    
             </div>
 
             <script src="script.jsx"></script>
