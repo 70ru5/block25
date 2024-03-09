@@ -245,3 +245,4 @@ const displayResult = (resultText) => {
     resultElement.textContent = resultText;
 }
 
+
