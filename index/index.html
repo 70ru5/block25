@@ -3,19 +3,29 @@
     <head>
         <meta charset="utf-8"/>
         <title>ブロック25</title>
+        <link rel="stylesheet" href="stylesheet.css" type="text/css">
     </head>
     <body>
-        <div>
-            <canvas id="canvas" width="400" height="400"> </canvas>
-        </div>
-            <form action ="/" method = "post">
-                <p>この観光名所はなに？（ひらがな6文字）：<br>
-                <input type="text" name="answer"></p>
-            </form>
-        <div>
+        <div class="container">
+            <div class="explanation">
+                <p>キーボードの左右キー（←／→）で板を左右に動かします</p>
+                <p>スペースキーで一時停止できます</p>
+                <p>なるべく早く答えると高得点！</p>
+            </div>
+            <div>
+                <canvas id="canvas" width="400" height="400"> </canvas>
+            </div>
+                <form action ="/" method = "post">
+                    <p id ="question"></p>
+                    <p>（<span id="ansType"></span><span id="ansLength"></span>文字）</p>
+                    <input type="text" name="userAns">
+                    <input type="submit" value="答える！">
+                </form>
+            <div>
 
-        </div>
+            </div>
 
-        <script src="script.jsx"></script>
+            <script src="script.jsx"></script>
+        </div>
     </body>
 </html>

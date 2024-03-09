@@ -1,8 +1,34 @@
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
 
+let imgPath;
+
+document.addEventListener('DOMContentLoaded', function() {
+    fetchQuiz();
+});
+
+const fetchQuiz = () => {
+    fetch('/quiz')
+        .then(response => response.json())
+        .then(data => {
+            displayQuiz(data);
+        })
+        .catch(error => console.error('Error fetching quiz:', error));
+}
+
 const img = new Image();
-img.src = "./images/StatueOfLiberty.jpeg";
+const displayQuiz = (quiz) => {
+    document.getElementById('question').textContent = quiz.question;
+    document.getElementById('ansLength').textContent = quiz.ans_length;
+
+    if (quiz.ans_type === 0) {
+        document.getElementById('ansType').textContent = "ひらがな";
+    } else if (quiz.ans_type === 1) {
+        document.getElementById('ansType').textContent = "カタカナ";
+    }
+
+    img.src = "./images/" + quiz.img_path;
+}
 
 canvas.style.border = "3px solid";
 
@@ -32,8 +58,7 @@ for (let c = 0; c < brickColumnCount; c++) {
   }
 }
 
-let score = 0;
-
+let score = 25;
 let lives = 3;
 
 let request = null;
@@ -78,12 +103,7 @@ const collisionDetection = () => {
                 ) {
                     dy = -dy;
                     b.status = 0;
-                    score++;
-                    if (score === brickRowCount * brickColumnCount) {
-                        alert("YOU WIN, CONGRATULATIONS!");
-                        document.location.reload();
-                        clearInterval(interval); // Needed for Chrome to end game
-                    }
+                    score--;
                 }
             }
         }
@@ -142,7 +162,7 @@ const drawBricks = () => {
   
 const draw = () => {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.drawImage(img, 0, 30, canvas.width, img.height * canvas.width/img.width)
+    ctx.drawImage(img, 0, 30, canvas.width, img.height * canvas.width / img.width); 
     drawBricks();
     drawBall();
     drawPaddle();
