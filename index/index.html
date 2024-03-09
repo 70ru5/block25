@@ -4,9 +4,14 @@
         <meta charset="utf-8"/>
         <title>ブロック25</title>
         <link rel="stylesheet" href="stylesheet.css" type="text/css">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap" rel="stylesheet">
+        <script src="https://webfont.fontplus.jp/accessor/script/fontplus.js?Ynk5~uTQzMQ%3D&box=0MIQqKAZpkc%3D&aa=1&ab=2"></script>
     </head>
     <body>
-        <div id="title">
+        <div class="title">
             <img src="./images/block25_logo.png" alt="ブロック25" />
         </div>
         <div class ="background">
@@ -17,13 +22,11 @@
             <div class="explanation">
                 <h2>ルール説明</h2>
                 <p>キーボードの左右キー（←／→）で板を左右に動かします</p>
-                <p>スペースキーで一時停止できます</p>
+                <p>スペースキーで一時停止／再開できます</p>
                 <p>正解したときに残っていたパネルの枚数が得点になります</p>
             </div>
-            <div>
-                <canvas id="canvas" width="400" height="400"> </canvas>
-            </div>
-            <div>
+            <div class="quiz">
+                <h2>クイズ</h2>
                 <form id = "answerForm">
                     <p id ="question"></p>
                     <p>（<span id="ansType"></span><span id="ansLength"></span>文字）</p>
@@ -31,10 +34,8 @@
                     <input type="text" name="userAns" id ="userAns">
                     <input type="button" value="答える！" onclick="sendAnswer()">
                 </form>
+                <div id = "quizResult"></div>    
             </div>
-            <div id = "quizResult">    
-            </div>
-
         </div>
         </div>
         <script src="script.jsx"></script>
