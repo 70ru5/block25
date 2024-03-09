@@ -3,6 +3,7 @@ package main
 import (
 	"database/sql"
 	"net/http"
+	"os"
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
@@ -29,8 +30,8 @@ type Quiz struct {
 func (s *ServerImpl) pickRandomQuiz() (Quiz, error) {
 	var quiz Quiz
 	const pickRandomQuiz = "SELECT * FROM quizzes ORDER BY RANDOM() LIMIT 1; "
-	rows := s.DB.QueryRow(pickRandomQuiz)
-	err := rows.Scan(&quiz.ID, &quiz.Question, &quiz.CorrectAns, &quiz.AnsLength, &quiz.AnsType, &quiz.ImgPath)
+	row := s.DB.QueryRow(pickRandomQuiz)
+	err := row.Scan(&quiz.ID, &quiz.Question, &quiz.CorrectAns, &quiz.AnsLength, &quiz.AnsType, &quiz.ImgPath)
 	if err != nil {
 		return Quiz{}, err
 	}
@@ -49,8 +50,12 @@ func (s *ServerImpl) giveQuiz(c echo.Context) error {
 
 func (s *ServerImpl) checkAnswer(c echo.Context) error {
 	ans := c.FormValue("userAns")
+	quizID := c.FormValue("quizID")
 
-	quiz, err := s.pickRandomQuiz()
+	var quiz Quiz
+	const selectCorrectAnswer = "SELECT correctAns FROM quizzes WHERE id = ?"
+	row := s.DB.QueryRow(selectCorrectAnswer, quizID)
+	err := row.Scan(&quiz.CorrectAns)
 	if err != nil {
 		return err
 	}
@@ -88,6 +93,15 @@ func main() {
 	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())
 	e.Logger.SetLevel(log.INFO)
+
+	frontURL := os.Getenv("FRONT_URL")
+	if frontURL == "" {
+		frontURL = "http://localhost:1323"
+	}
+	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
+		AllowOrigins: []string{frontURL},
+		AllowMethods: []string{http.MethodGet, http.MethodPut, http.MethodPost, http.MethodDelete},
+	}))
 
 	e.Static("/", "index")
 

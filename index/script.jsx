@@ -28,6 +28,8 @@ const displayQuiz = (quiz) => {
     }
 
     img.src = "./images/quiz/" + quiz.img_path;
+
+    document.getElementById('quizID').value = quiz.id;
 }
 
 canvas.style.border = "3px solid";
@@ -220,3 +222,27 @@ const pause = () => {
         request = requestAnimationFrame(draw);
     } 
 }
+
+const sendAnswer = () => {
+    let userAns = document.getElementById("userAns").value;
+    let quizID = document.getElementById("quizID").value;
+
+    fetch("/", {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: `quizID=${quizID}&userAns=${userAns}`
+    }).then(response => response.text())
+        .then((responseText) => {
+            displayResult(responseText);
+        })
+        .catch(error => console.error('Error:', error));
+}
+
+const displayResult = (resultText) => {
+    const resultElement = document.getElementById('quizResult');
+    resultElement.textContent = resultText;
+}
+
+
