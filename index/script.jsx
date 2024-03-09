@@ -27,7 +27,7 @@ const displayQuiz = (quiz) => {
         document.getElementById('ansType').textContent = "カタカナ";
     }
 
-    img.src = "./images/" + quiz.img_path;
+    img.src = "./images/quiz/" + quiz.img_path;
 }
 
 canvas.style.border = "3px solid";
